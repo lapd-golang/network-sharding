@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+package DSBlockMessage;
+
+message ByteArray
+{
+     bytes data = 1;
+}
+
+message ProtoCommittee
+{
+    repeated ByteArray members = 1;
+}
+
+message ProtoBlockBase
+{
+    message CoSignatures
+    {
+        ByteArray cs1          = 1;
+        repeated bool b1                = 2 [packed=true];
+        ByteArray cs2          = 3;
+        repeated bool b2                = 4 [packed=true];
+    }
+     bytes blockhash            = 1;
+     CoSignatures cosigs        = 2;
+     uint64 timestamp           = 3;
+}
+
+// ============================================================================
+// Node messages
+// ============================================================================
+
+message NodeDSBlock
+{
+     uint32 shardid                        = 1;
+     ProtoDSBlock dsblock                  = 2;
+     ProtoShardingStructure sharding       = 4;
+     ProtoTxSharingAssignments assignments = 5;
+}
+
+message ProtoDSBlock
+{
+    message DSBlockHashSet
+    {
+         bytes shardinghash     = 1;
+         bytes txsharinghash    = 2;
+         bytes reservedfield    = 3;
+    }
+    message DSBlockHeader
+    {
+        uint32 dsdifficulty    = 1; // only LSB used
+        uint32 difficulty      = 2; // only LSB used
+         bytes prevhash         = 3; // 32 bytes
+         ByteArray leaderpubkey = 4;
+         uint64 blocknum        = 5;
+         uint64 epochnum        = 6;
+        ByteArray gasprice     = 7;
+         ByteArray swinfo       = 8;
+        message PowDSWinners
+        {
+             ByteArray key      = 1;
+             ByteArray val      = 2;
+        }
+        repeated PowDSWinners dswinners = 9;
+         DSBlockHashSet hash    = 10;
+         bytes committeehash    = 11;
+    }
+     DSBlockHeader header       = 1;
+     ProtoBlockBase blockbase   = 2;
+}
+
+message ProtoShardingStructure
+{
+    message Member
+    {
+         ByteArray pubkey   = 1;
+         ByteArray peerinfo = 2;
+         uint32 reputation  = 3;
+    }
+    message Shard
+    {
+        repeated Member members     = 1;
+    }
+    repeated Shard shards           = 1;
+}
+
+message ProtoTxSharingAssignments
+{
+    message AssignedNodes
+    {
+        repeated ByteArray receivers  = 1;
+        repeated ByteArray senders    = 2;
+    }
+    repeated ByteArray dsnodes        = 1;
+    repeated AssignedNodes shardnodes = 2;
+}
+
+message ProtoPeer
+{
+     ByteArray ipaddress    = 1;
+     uint32 listenporthost  = 2;
+}
+
+message ProtoDSNode
+{
+     ByteArray pubkey = 1;
+     ByteArray peer   = 2;
+}
+
+message ProtoDSCommittee
+{
+    repeated ProtoDSNode dsnodes = 1;
+}

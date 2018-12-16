@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package DSBlockMessage;
+import "DSBlockMessage.proto";
+
+service DSBlockchain{
+    // Add a Directory Service block to DS Blockchain
+    rpc PutDSBlock(NodeDSBlock) returns (ProtoDSBlock){}
+    rpc GetBlockchain(GetDSBlockchainRequest) returns (GetDSBlockchainResponse) {}
+    rpc GetDSBlock(GetDSBlockRequest) returns (ProtoDSBlock){}
+}
+
+message GetDSBlockRequest{
+    uint64 blocknum = 1;
+}
+
+message GetDSBlockchainRequest {} 
+
+message GetDSBlockchainResponse {
+	repeated ProtoDSBlock blocks = 1;
+}

@@ -1,0 +1,16 @@
+package blockheader
+
+//DSPOWDIFFICULTY ...
+const DSPOWDIFFICULTY = 5
+
+//POWDIFFICULTY ...
+const POWDIFFICULTY = 2
+
+//SysTimestampVarianceInSeconds ...
+const SysTimestampVarianceInSeconds = 3600
+
+//CONSENSUSOBJECTTIMEOUT ...
+const CONSENSUSOBJECTTIMEOUT = 10
+
+//TXDISTRIBUTETIMEINMS ...
+const TXDISTRIBUTETIMEINMS = 10000
