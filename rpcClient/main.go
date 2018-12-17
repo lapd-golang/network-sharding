@@ -143,8 +143,10 @@ func putDSBlock() {
 	log.Println("DS Block Details")
 	log.Println("--------------------------------")
 	log.Printf("Block number: %v \n", dsBlock.GetHeader().GetBlocknum())
-	log.Printf("Hash: %x \n", dsBlock.GetHeader().GetPrevhash())
+	log.Printf("Hash: %x \n", dsBlock.GetBlockbase().GetBlockhash())
+	log.Printf("Parent Hash: %x \n", dsBlock.GetHeader().GetPrevhash())
 	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDsdifficulty())
+	log.Printf("Difficulty: %v \n", dsBlock.GetHeader().GetDifficulty())
 	log.Printf("Gas Price: %v \n", dsBlock.GetHeader().GetGasprice())
 	log.Println("--------------------------------")
 
@@ -162,10 +164,11 @@ func getDSBlock(blockNum uint64) {
 
 	log.Println("DS Block Details")
 	log.Println("--------------------------------")
-	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDsdifficulty())
-	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDifficulty())
 	log.Printf("Block number: %v \n", dsBlock.GetHeader().GetBlocknum())
-	log.Printf("Epoch Number: %v \n", dsBlock.GetHeader().GetEpochnum())
+	log.Printf("Hash: %x \n", dsBlock.GetBlockbase().GetBlockhash())
+	log.Printf("Parent Hash: %x \n", dsBlock.GetHeader().GetPrevhash())
+	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDsdifficulty())
+	log.Printf("Difficulty: %v \n", dsBlock.GetHeader().GetDifficulty())
 	log.Printf("Gas Price: %v \n", dsBlock.GetHeader().GetGasprice())
 	log.Println("--------------------------------")
 }

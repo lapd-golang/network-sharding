@@ -232,10 +232,11 @@ func MapProtoDSBlocktoDSBlock(nb *ds.NodeDSBlock, lastBlock *b.DSBlock) b.DSBloc
 	PeerInfoMap := make(map[string]n.Peer)
 
 	PeerInfoMap[winPubkey.String()] = PeerInfo
+
 	dsBlockHeader := bh.DSBlockHeader{
 		Dsdifficulty: protoDSBlock.GetHeader().GetDsdifficulty(),
 		Difficulty:   protoDSBlock.GetHeader().GetDifficulty(),
-		Prevhash:     lastBlock.Header.Prevhash,
+		Prevhash:     lastBlock.Blockbase.Blockhash,
 		Leaderpubkey: c.EncodePubKey(c.CreateSignature()),
 		Blocknum:     protoDSBlock.GetHeader().GetBlocknum(),
 		Epochnum:     protoDSBlock.GetHeader().GetEpochnum(),
@@ -274,7 +275,6 @@ func MapProtoDSBlocktoDSBlock(nb *ds.NodeDSBlock, lastBlock *b.DSBlock) b.DSBloc
 		Header:    &dsBlockHeader,
 		Blockbase: &base,
 	}
-	//fmt.Printf("dsBlockHeader size: %v\n", dsBlock)
 
 	return dsBlock
 }
