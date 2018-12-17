@@ -1,7 +1,4 @@
 # Block validation processing before being included in the Blockchain
-
-### Steps to start the blockchain server
-
 After having cloned the project, go to project location and add the below mentioned dependencies.
 
 - Install protoc compiler - [protoc](https://github.com/protocolbuffers/protobuf/releases)
@@ -11,7 +8,6 @@ After having cloned the project, go to project location and add the below mentio
 - Install context package - `go get -u golang.org/x/net/context`.
 
 - Install protobuf package - `go get -u github.com/golang/protobuf/proto`
-
 
 ### Steps to start the blocchain server
 
