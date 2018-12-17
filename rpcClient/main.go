@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/gob"
 	"flag"
-	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -82,7 +81,6 @@ func putDSBlock() {
 
 	shardinghash := c.Hash(protoShardStruct.String())
 
-	fmt.Printf("1st sharding struc hash: %v \n", shardinghash)
 	txsharinghash := c.Hash(txSharingAssign.String())
 	dsBlockHashSet := dsProto.ProtoDSBlock_DSBlockHashSet{
 		Shardinghash:  shardinghash,
@@ -132,17 +130,12 @@ func putDSBlock() {
 		Sharding:    protoShardStruct,
 		Assignments: &txSharingAssign,
 	}
-	log.Println()
-	log.Println()
-	log.Printf("Creation time: %v\n", time.Now())
-	log.Printf("nodeDSBlock received: %s\n", nodeDSBlock)
-	log.Println()
+
 	dsBlock, putErr := client.PutDSBlock(context.Background(), &nodeDSBlock)
 
-	if putErr != nil {
+	if dsBlock == nil || putErr != nil {
 		log.Fatalf("Unable to Put DS Block from the Node: %v", putErr)
 	}
-	fmt.Printf("%T \n", *dsBlock)
 
 }
 
@@ -173,8 +166,6 @@ func getBlockchain() {
 		log.Fatalf("unable to get directory service blockchain: %v", getErr)
 	}
 
-	log.Println("blocks:")
-
 	for _, b := range blockchain.Blocks {
 		log.Printf("%v \n", b)
 	}
@@ -184,8 +175,6 @@ func getDSCommittee() dsProto.ProtoDSCommittee {
 	sign1 := c.CreateSignature()
 	sign2 := c.CreateSignature()
 	sign3 := c.CreateSignature()
-
-	//fmt.Printf("DS Comm Pub key: %v\n", sign1.R)
 
 	p1 := dsProto.ProtoPeer{
 		Ipaddress:      &dsProto.ByteArray{Data: []byte{127, 0, 0, 3}},
@@ -333,9 +322,7 @@ func getCoSignatures(d *dsProto.ProtoDSCommittee) *dsProto.ProtoBlockBase_CoSign
 	sign2 := c.DecodePubKey(data2)
 	sign3 := c.DecodePubKey(data3)
 
-	res := c.Verify("Secret message", *sign1, (*sign1).R)
-
-	fmt.Printf("res is: %v\n", res)
+	c.Verify("Secret message", *sign1, (*sign1).R)
 
 	//log.Printf("sign pubKey: %v \n", sign1.S)
 	var network1 bytes.Buffer         // Stand-in for a network connection

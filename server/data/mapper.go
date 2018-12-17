@@ -1,9 +1,6 @@
 package dtomapper
 
 import (
-	"fmt"
-	"log"
-
 	proto "../../directoryServiceProto"
 	c "../crypto"
 	d "../data/blockData/block"
@@ -11,14 +8,11 @@ import (
 
 //MapToProtoBuffer ...
 func MapToProtoBuffer(DSBlocks []*d.DSBlock, blocks []*proto.ProtoDSBlock) []*proto.ProtoDSBlock {
-	log.Printf("DSBlocks at MapToProtoBuffer =%v \n", len(DSBlocks))
 	for _, b := range DSBlocks {
 
 		protoDSBlock := MapToProtoDSBlock(b)
 		blocks = append(blocks, protoDSBlock)
 	}
-
-	fmt.Printf("blocks size in mapper: %v\n", len(blocks))
 
 	return blocks
 }
@@ -32,9 +26,6 @@ func MapToProtoDSBlock(b *d.DSBlock) *proto.ProtoDSBlock {
 	leaderSign := Header.Leaderpubkey
 	leaderpubkey := c.DecodePubKey(leaderSign)
 	peerInfo := pwoDswinners[leaderpubkey.String()]
-
-	log.Printf("ListenPortHost =%v \n", peerInfo.ListenPortHost)
-	log.Printf("IP =%v \n", peerInfo.IP)
 
 	var arr []byte
 	var vvv []byte

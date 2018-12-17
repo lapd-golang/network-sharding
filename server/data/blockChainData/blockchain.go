@@ -101,7 +101,7 @@ func constructGenesisDSBlock() *b.DSBlock {
 
 func nowAsUnixMilli() int64 {
 	now := time.Now()
-	log.Printf("Today Date: %v", time.Now().Format(time.ANSIC))
+	//log.Printf("Today Date: %v", time.Now().Format(time.ANSIC))
 	unixNano := now.UnixNano()
 	umillisec := unixNano / 1000000
 	return umillisec
@@ -274,7 +274,7 @@ func MapProtoDSBlocktoDSBlock(nb *ds.NodeDSBlock, lastBlock *b.DSBlock) b.DSBloc
 		Header:    &dsBlockHeader,
 		Blockbase: &base,
 	}
-	fmt.Printf("dsBlockHeader size: %v\n", dsBlock)
+	//fmt.Printf("dsBlockHeader size: %v\n", dsBlock)
 
 	return dsBlock
 }
