@@ -1,6 +1,6 @@
 # Block validation processing before being included in the Blockchain
 
-### Steps to start the blocchain server
+### Steps to start the blockchain server
 
 After having cloned the project, go to project location and add the below mentioned dependencies.
 
