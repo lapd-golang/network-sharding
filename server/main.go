@@ -61,15 +61,17 @@ func (s *Server) GetDSBlock(ctx context.Context, in *ds.GetDSBlockRequest) (*ds.
 	blocks := []*ds.ProtoDSBlock{}
 
 	blocks = m.MapToProtoBuffer(s.DSBlockChain.DSBlocks, blocks)
+	//var protoB *ds.ProtoDSBlock
 	log.Printf("size of blockchain in get is now::: %v\n\n", len(blocks))
 	for _, b := range blocks {
-		log.Println("here it is -------------")
 
 		expectedBlockNum := b.Header.Blocknum
-		log.Println("then here it is -------------")
+		log.Printf("here it is -------------expectedBlockNum=%v\n", expectedBlockNum)
+
 		if expectedBlockNum == blockNum {
 			return b, nil
 		}
+		log.Printf("here it is -------------blockNum=%v\n", blockNum)
 	}
 	return new(ds.ProtoDSBlock), nil
 }

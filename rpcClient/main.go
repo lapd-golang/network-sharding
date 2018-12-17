@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	c "../server/crypto"
@@ -38,7 +39,11 @@ func main() {
 	}
 
 	if len(blocknum) > 0 {
-		getDSBlock()
+		u, err := strconv.ParseUint(blocknum, 10, 64)
+		if err != nil {
+			panic("Incorrect block number format: " + blocknum)
+		}
+		getDSBlock(u)
 	}
 
 	if *getBlockchainFlag {
@@ -137,9 +142,9 @@ func putDSBlock() {
 	log.Printf("New Block Added: %s\n", *dsBlock)
 }
 
-func getDSBlock() {
+func getDSBlock(blockNum uint64) {
 	getDSBlockRequest := dsProto.GetDSBlockRequest{
-		Blocknum: 1,
+		Blocknum: blockNum,
 	}
 	dsBlock, getErr := client.GetDSBlock(context.Background(), &getDSBlockRequest)
 
