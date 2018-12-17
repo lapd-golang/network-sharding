@@ -18,6 +18,7 @@ import (
 var client dsProto.DSBlockchainClient
 
 func main() {
+
 	var operation string
 	var blocknum string
 	flag.StringVar(&operation, "opt", "", "Usage")
@@ -136,6 +137,16 @@ func putDSBlock() {
 	if dsBlock == nil || putErr != nil {
 		log.Fatalf("Unable to Put DS Block from the Node: %v", putErr)
 	}
+
+	log.Println()
+	log.Println("DS Block is successfully added to DS Blockchain")
+	log.Println("DS Block Details")
+	log.Println("--------------------------------")
+	log.Printf("Block number: %v \n", dsBlock.GetHeader().GetBlocknum())
+	log.Printf("Hash: %x \n", dsBlock.GetHeader().GetPrevhash())
+	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDsdifficulty())
+	log.Printf("Gas Price: %v \n", dsBlock.GetHeader().GetGasprice())
+	log.Println("--------------------------------")
 
 }
 
