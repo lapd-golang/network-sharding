@@ -23,12 +23,6 @@ func main() {
 	flag.StringVar(&operation, "opt", "", "Usage")
 	flag.StringVar(&blocknum, "block", "", "Usage")
 	flag.Parse()
-
-	fmt.Println("name::::" + operation)
-	fmt.Println("blocknum::::" + blocknum)
-
-	//putDSBlockFlag := flag.Bool("add", false, "Add a new DS Block")
-	//getDSBlockFlag := flag.Bool("get", false, "Get a DS Block")
 	getBlockchainFlag := flag.Bool("list", false, "List all blocks")
 	flag.Parse()
 
