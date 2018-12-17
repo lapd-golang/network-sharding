@@ -8,7 +8,7 @@ import (
 
 //Peer ...
 type Peer struct {
-	IP             *[4]byte
+	IP             *[]byte
 	ListenPortHost uint32
 }
 

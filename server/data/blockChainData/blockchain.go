@@ -3,12 +3,9 @@ package blockchain
 import (
 	"bytes"
 	"encoding/gob"
-	"encoding/hex"
 	"fmt"
 	"log"
 	"time"
-
-	"encoding/json"
 
 	c "../../crypto"
 	n "../../network"
@@ -61,20 +58,19 @@ func (gb *GenesisDSBlock) InitializeGenesisDSBlock(dsBlockChain *DSBlockChain) *
 }
 
 func constructGenesisDSBlock() *b.DSBlock {
-	const pubKeyHex = "1c5dbfb5114647061669feecb4c20dcc8f490b263ab7c2f06ceadeb4e1f92cea"
-	//const priKeyHex = "BCCDF94ACEC5B6F1A2D96BDDC6CBE22F3C6DFD89FD791F18B722080A908253CD"
-	pubKey, _ := hex.DecodeString(pubKeyHex)
+
+	sign := c.CreateSignature()
 
 	powDswinners := make(map[string]n.Peer)
 
-	v := n.Peer{IP: &[4]byte{127, 0, 0, 0}, ListenPortHost: 8080}
-	powDswinners[string(pubKey[:])] = v
-	//fmt.Printf("pub key in map v=%v k=%v\n", pubKey, powDswinners[string(pubKey)])
+	v := n.Peer{IP: &[]byte{127, 0, 0, 0}, ListenPortHost: 8080}
+	powDswinners[sign.String()] = v
+
 	header := bh.DSBlockHeader{
 		Dsdifficulty: bh.DSPOWDIFFICULTY,
 		Difficulty:   bh.POWDIFFICULTY,
 		Prevhash:     []byte{0},
-		Leaderpubkey: pubKey,
+		Leaderpubkey: c.EncodePubKey(sign),
 		Blocknum:     0,
 		Epochnum:     0,
 		Gasprice:     []byte{0},
@@ -86,17 +82,12 @@ func constructGenesisDSBlock() *b.DSBlock {
 		},
 	}
 
-	//convert the block header to hash value
-	outHeader, err := json.Marshal(header)
+	//Get SHA 256 value
 
-	if err != nil {
-		log.Fatalf("Unable to convert block header struct to string: %v", err)
-	}
+	hash := c.Hash(string(fmt.Sprintf("%s", header)))
+
 	currentTime := nowAsUnixMilli()
 
-	//Get SHA 256 value
-	hash := c.Hash(string(outHeader))
-	fmt.Printf("hash during genesis creation: %v\n", hash)
 	dsBlock := b.DSBlock{
 		Header: &header,
 		Blockbase: &b.Base{
@@ -235,7 +226,7 @@ func MapProtoDSBlocktoDSBlock(nb *ds.NodeDSBlock, lastBlock *b.DSBlock) b.DSBloc
 	sign := c.DecodePubKey(powDSWinnerBytes)
 	winPubkey := c.PublicKey("Secret message", *sign)
 	PeerInfo := n.Peer{
-		IP:             &[4]byte{127, 0, 0, 0},
+		IP:             &[]byte{127, 0, 0, 0},
 		ListenPortHost: peer.Listenporthost,
 	}
 	PeerInfoMap := make(map[string]n.Peer)

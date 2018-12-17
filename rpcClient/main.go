@@ -132,14 +132,18 @@ func putDSBlock() {
 		Sharding:    protoShardStruct,
 		Assignments: &txSharingAssign,
 	}
-
+	log.Println()
+	log.Println()
+	log.Printf("Creation time: %v\n", time.Now())
+	log.Printf("nodeDSBlock received: %s\n", nodeDSBlock)
+	log.Println()
 	dsBlock, putErr := client.PutDSBlock(context.Background(), &nodeDSBlock)
 
 	if putErr != nil {
 		log.Fatalf("Unable to Put DS Block from the Node: %v", putErr)
 	}
-	//fmt.Printf("%x \n", *dsBlock)
-	log.Printf("New Block Added: %s\n", *dsBlock)
+	fmt.Printf("%T \n", *dsBlock)
+
 }
 
 func getDSBlock(blockNum uint64) {

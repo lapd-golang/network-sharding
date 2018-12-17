@@ -1,13 +1,8 @@
 package dtomapper
 
 import (
-	"bytes"
-	"encoding/binary"
 	"fmt"
 	"log"
-	"strconv"
-	"strings"
-	"unsafe"
 
 	proto "../../directoryServiceProto"
 	c "../crypto"
@@ -22,33 +17,29 @@ func MapToProtoBuffer(DSBlocks []*d.DSBlock, blocks []*proto.ProtoDSBlock) []*pr
 		protoPowDSWinners := []*proto.ProtoDSBlock_DSBlockHeader_PowDSWinners{}
 		pwoDswinners := Header.PoWDswinners
 
-		for pubkey, peer := range pwoDswinners {
+		leaderSign := Header.Leaderpubkey
+		leaderpubkey := c.DecodePubKey(leaderSign)
+		peerInfo := pwoDswinners[leaderpubkey.String()]
 
-			b := []byte(pubkey)
-			bs := fmt.Sprintf("%v", b)
-			var pubkeyBytes []byte
+		log.Printf("ListenPortHost =%v \n", peerInfo.ListenPortHost)
+		log.Printf("IP =%v \n", peerInfo.IP)
 
-			for _, ps := range strings.Split(strings.Trim(bs, "[]"), " ") {
-				pi, _ := strconv.Atoi(ps)
-				pubkeyBytes = append(pubkeyBytes, byte(pi))
-			}
-
-			fmt.Printf("pubkeyBytes=%v \n", pubkeyBytes)
-
-			buf := &bytes.Buffer{}
-			err := binary.Write(buf, binary.LittleEndian, *peer.IP)
-
-			if err != nil {
-				log.Fatalf("Failed to serialize the Peer information %v", err)
-			}
-
-			protoPowDSWinner := proto.ProtoDSBlock_DSBlockHeader_PowDSWinners{
-				Key: &proto.ByteArray{Data: pubkeyBytes},
-				Val: &proto.ByteArray{Data: buf.Bytes()},
-			}
-
-			protoPowDSWinners = append(protoPowDSWinners, &protoPowDSWinner)
+		var arr []byte
+		var vvv []byte
+		if peerInfo.IP != nil {
+			vvv := *peerInfo.IP
+			copy(arr[:], string(vvv))
+			vvv = *peerInfo.IP
+			copy(arr[:], string(vvv))
+		} else {
+			vvv = []byte{127, 0, 0, 0}
 		}
+
+		protoPowDSWinner := proto.ProtoDSBlock_DSBlockHeader_PowDSWinners{
+			Key: &proto.ByteArray{Data: vvv},
+		}
+
+		protoPowDSWinners = append(protoPowDSWinners, &protoPowDSWinner)
 
 		protoHeader := proto.ProtoDSBlock_DSBlockHeader{
 			Dsdifficulty: Header.Dsdifficulty,
@@ -69,43 +60,22 @@ func MapToProtoBuffer(DSBlocks []*d.DSBlock, blocks []*proto.ProtoDSBlock) []*pr
 
 		var protoCosigs = proto.ProtoBlockBase_CoSignatures{}
 
-		if dscosigs == nil {
-
-			//Serialize CS1
-			Cs1 := c.Signature{}
-			Cs2 := c.Signature{}
-			var byteCs1Slice []byte = *(*[]byte)(unsafe.Pointer(&Cs1))
-			var byteCs2Slice []byte = *(*[]byte)(unsafe.Pointer(&Cs2))
-
+		if dscosigs != nil {
+			Cs1 := dscosigs.Cs1
+			Cs2 := dscosigs.Cs2
 			protoCosigs = proto.ProtoBlockBase_CoSignatures{
-				Cs1: &proto.ByteArray{Data: byteCs1Slice},
-				B1:  []bool{},
-				Cs2: &proto.ByteArray{Data: byteCs2Slice},
-				B2:  []bool{},
-			}
-
-		} else {
-
-			cosigs := blockbase.Cosigs
-			//Serialize CS1
-			Cs1 := cosigs.Cs1
-			Cs2 := cosigs.Cs2
-			var byteCs1Slice []byte = *(*[]byte)(unsafe.Pointer(&Cs1))
-			var byteCs2Slice []byte = *(*[]byte)(unsafe.Pointer(&Cs2))
-
-			protoCosigs = proto.ProtoBlockBase_CoSignatures{
-				Cs1: &proto.ByteArray{Data: byteCs1Slice},
-				B1:  cosigs.B1,
-				Cs2: &proto.ByteArray{Data: byteCs2Slice},
-				B2:  cosigs.B2,
+				Cs1: &proto.ByteArray{Data: c.EncodePubKey(&Cs1)},
+				B1:  dscosigs.B1,
+				Cs2: &proto.ByteArray{Data: c.EncodePubKey(&Cs2)},
+				B2:  dscosigs.B2,
 			}
 		}
+
 		protoBlockBase := proto.ProtoBlockBase{
 			Blockhash: blockhash,
 			Cosigs:    &protoCosigs,
 			Timestamp: blockbase.Timestamp,
 		}
-		//fmt.Printf("Cosigs: %v\n", *(protoBlockBase.Cosigs))
 
 		protoDSBlock := proto.ProtoDSBlock{
 			Header:    &protoHeader,
