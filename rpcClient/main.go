@@ -147,7 +147,7 @@ func putDSBlock() {
 	log.Printf("Parent Hash: %x \n", dsBlock.GetHeader().GetPrevhash())
 	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDsdifficulty())
 	log.Printf("Difficulty: %v \n", dsBlock.GetHeader().GetDifficulty())
-	log.Printf("Gas Price: %v \n", dsBlock.GetHeader().GetGasprice())
+	log.Printf("Gas Price: %x \n", dsBlock.GetHeader().GetGasprice().GetData())
 	log.Println("--------------------------------")
 
 }
@@ -169,7 +169,7 @@ func getDSBlock(blockNum uint64) {
 	log.Printf("Parent Hash: %x \n", dsBlock.GetHeader().GetPrevhash())
 	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDsdifficulty())
 	log.Printf("Difficulty: %v \n", dsBlock.GetHeader().GetDifficulty())
-	log.Printf("Gas Price: %v \n", dsBlock.GetHeader().GetGasprice())
+	log.Printf("Gas Price: %x \n", dsBlock.GetHeader().GetGasprice().GetData())
 	log.Println("--------------------------------")
 }
 
