@@ -138,11 +138,14 @@ func putDSBlock() {
 		log.Fatalf("Unable to Put DS Block from the Node: %v", putErr)
 	}
 
+	millis := dsBlock.GetBlockbase().GetTimestamp()
+
 	log.Println()
 	log.Println("DS Block is successfully added to DS Blockchain")
 	log.Println("DS Block Details")
 	log.Println("--------------------------------")
-	log.Printf("Block number: %v \n", dsBlock.GetHeader().GetBlocknum())
+	log.Printf("Block number(Height): %v \n", dsBlock.GetHeader().GetBlocknum())
+	log.Printf("TimeStamp: %v \n", time.Unix(0, int64(millis)*int64(time.Millisecond)))
 	log.Printf("Hash: %x \n", dsBlock.GetBlockbase().GetBlockhash())
 	log.Printf("Parent Hash: %x \n", dsBlock.GetHeader().GetPrevhash())
 	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDsdifficulty())
@@ -162,9 +165,12 @@ func getDSBlock(blockNum uint64) {
 		log.Fatalf("unable to get directory service blockchain: %v", getErr)
 	}
 
+	millis := dsBlock.GetBlockbase().GetTimestamp()
+
 	log.Println("DS Block Details")
 	log.Println("--------------------------------")
-	log.Printf("Block number: %v \n", dsBlock.GetHeader().GetBlocknum())
+	log.Printf("Block number(Height): %v \n", dsBlock.GetHeader().GetBlocknum())
+	log.Printf("TimeStamp: %v \n", time.Unix(0, int64(millis)*int64(time.Millisecond)))
 	log.Printf("Hash: %x \n", dsBlock.GetBlockbase().GetBlockhash())
 	log.Printf("Parent Hash: %x \n", dsBlock.GetHeader().GetPrevhash())
 	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDsdifficulty())
