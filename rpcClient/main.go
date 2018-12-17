@@ -158,7 +158,11 @@ func getDSBlock(blockNum uint64) {
 
 	log.Println("DS Block Details")
 	log.Println("--------------------------------")
-	log.Printf("%v \n", dsBlock)
+	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDsdifficulty())
+	log.Printf("DS Difficulty: %v \n", dsBlock.GetHeader().GetDifficulty())
+	log.Printf("Block number: %v \n", dsBlock.GetHeader().GetBlocknum())
+	log.Printf("Epoch Number: %v \n", dsBlock.GetHeader().GetEpochnum())
+	log.Printf("Gas Price: %v \n", dsBlock.GetHeader().GetGasprice())
 	log.Println("--------------------------------")
 }
 
