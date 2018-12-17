@@ -23,5 +23,8 @@ func CheckWhetherBlockIsLatest(b, e, lb, le uint64) bool {
 
 //VerifyTimestamp ...
 func VerifyTimestamp(timestampInMicrosec, timeoutInSec uint64) bool {
+	// systemTimestampVarianceInSecond := 3600
+	// var lowBound int64
+	// var hiBound int64
 	return true
 }
