@@ -26,7 +26,7 @@ go run server/main.go
 
 Once the server is started, open another terminal for RPC calls to blockchain server.
 
-Go to project folder and execute the below command see details about a block with a block number 3.
+Go to project folder and execute the below command to see details about a block with block number 3.
 ```
 go run rpcClient/main.go -block 3
 ```
