@@ -1,4 +1,4 @@
-# Block validation processing before being included in the Blockchain
+## Block validation processing before being included in the Blockchain
 After having cloned the project, go to project location and install the below mentioned dependencies.
 
 - Install protoc compiler - [protoc](https://github.com/protocolbuffers/protobuf/releases)
